@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IoT Server - Dashboard</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <style>
+      .sensor-card {
+        border-radius: 15px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      .navbar-brand,
+      .nav-link {
+        font-size: 1.2rem;
+      }
+      footer {
+        text-align: center;
+        padding: 10px;
+        font-size: 0.9rem;
+        background-color: #f8f9fa;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/">IoT-server</a>
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Mantenedores
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="/mantenedores/microcontrollers">Microcontroladores</a></li>
+                  <li><a class="dropdown-item" href="/mantenedores/modules">Modulos</a></li>
+                  <li><a class="dropdown-item" href="/mantenedores/sensors">Sensores</a></li>
+                  <li><a class="dropdown-item" href="/mantenedores/statuses">Estados</a></li>
+                </ul>
+              </li>  
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Sensores
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="/sensors/KY018">KY018</a></li>
+              <li><a class="dropdown-item" href="/sensors/GYML8511">GYML8511</a></li>
+              <li><a class="dropdown-item" href="/sensors/MQ-2">MQ-2</a></li>
+            </ul>
+          </li>  
+          <li class="nav-item">
+            <a class="nav-link" href="#">Valores</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Gráficos</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Content -->
+    <div class="container mt-4">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Mantenedor: MICROCONTROLADORES</h2>
+        <a href="/microcontrollers/add" class="btn btn-primary">
+          CREAR NUEVO
+        </a>
+      </div>
+    
+      <div class="card">
+        <div class="card-body">
+          <div class="table-responsive">
+            <form method="post" action="/api/microcontrollers" class="needs-validation" novalidate>
+                <div class="mb-3">
+                    <label for="name" class="form-label">Nombre</label>
+                    <input type="text"
+                           class="form-control"
+                           id="name"
+                           name="name"
+                           required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="ip" class="form-label">IP</label>
+                    <input type="text"
+                           class="form-control"
+                           id="ip"
+                           name="ip"
+                           required>
+                </div>
+
+                <div class="mb-3"></div>
+                    <label for="status_id" class="form-label">Id Estado</label>
+                    <input type="number"
+                           class="form-control"
+                           id="status_id"
+                           name="status_id"
+                           required>
+                </div>
+
+                <div class="d-flex justify-content-end gap-2">
+                    <a href="/mantenedores/microcontrollers"
+                       class="btn btn-secondary">Cancelar</a>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <script>
+      function confirmDelete(id) {
+        if (confirm('Are you sure you want to delete this Book?')) {
+          window.location.href = '${pageContext.request.contextPath}/books/delete?id=' + id;
+        }
+      }
+    </script>
+
+    <!-- Footer -->
+    <footer>© 2024. IoT-server | <a href="https://iot-server.pivotnode.net" target="_blank">gustavorh</a></footer>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+      integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+      integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
