@@ -1,14 +1,6 @@
 const { Microcontroller } = require("../models/index");
 
 class MicrocontrollersService {
-  async create(data) {
-    try {
-      return await Microcontroller.create(data);
-    } catch (error) {
-      throw new Error(`Failed to create microcontroller: ${error.message}`);
-    }
-  }
-
   async getAll() {
     try {
       return await Microcontroller.findAll();
@@ -22,6 +14,14 @@ class MicrocontrollersService {
       return await Microcontroller.findByPk(id);
     } catch (error) {
       throw new Error(`Failed to fetch microcontroller: ${error.message}`);
+    }
+  }
+
+  async create(data) {
+    try {
+      return await Microcontroller.create(data);
+    } catch (error) {
+      throw new Error(`Failed to create microcontroller: ${error.message}`);
     }
   }
 
