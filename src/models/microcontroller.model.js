@@ -1,21 +1,23 @@
-const { DataTypes } = require("sequelize");
 const sequelize = require("../utils/database");
-const Status = require("./status.model");
+const { DataTypes } = require('sequelize');
 
-const Microcontroller = sequelize.define("Microcontroller", {
-  id: {
-    type: DataTypes.TINYINT,
-    primaryKey: true,
-    autoIncrement: true,
-  },
-  name: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  ip: {
-    type: DataTypes.STRING(15),
-    allowNull: false,
-  },
-});
-
-module.exports = Microcontroller;
+module.exports = (sequelize) => {
+  return sequelize.define('Microcontroller', {
+    id: {
+      type: DataTypes.TINYINT,
+      primaryKey: true
+    },
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    status_id: {
+      type: DataTypes.TINYINT,
+      allowNull: false
+    },
+    ip: {
+      type: DataTypes.STRING(15),
+      allowNull: false
+    }
+  });
+};

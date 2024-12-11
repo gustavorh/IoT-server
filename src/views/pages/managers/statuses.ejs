@@ -1,0 +1,18 @@
+<table class="data-table">
+    <thead>
+        <tr>
+            <% columns.forEach(column => { %>
+              <th><%= column %></th>
+            <% }) %>
+          </tr>
+    </thead>
+    <tbody id="dataTableBody">
+        <% data.forEach(row => { %>
+            <tr>
+              <% columns.forEach(column => { %>
+                <td><%= row[column] %></td>
+              <% }) %>
+            </tr>
+          <% }) %>
+    </tbody>
+  </table>

@@ -45,6 +45,16 @@ class statusesService {
       throw new Error(`Failed to delete status: ${error.message}`);
     }
   }
+
+  async getColumns() {
+    try {
+      console.log(Object.keys(Status.getAttributes));
+      
+      return await Object.keys(Status.getAttributes); // Extract column names
+    } catch (error) {
+      throw new Error(`Failed to fetch statuses: ${error.message}`);
+    }
+  }
 }
 
 module.exports = new statusesService();

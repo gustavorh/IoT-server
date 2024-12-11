@@ -1,20 +1,19 @@
-const { DataTypes } = require("sequelize");
 const sequelize = require("../utils/database");
+const { DataTypes } = require("sequelize");
 
-const Sensor = sequelize.define("Sensor", {
-  id: {
-    type: DataTypes.TINYINT,
-    primaryKey: true,
-    autoIncrement: true,
-  },
-  name: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  type: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-});
-
-module.exports = Sensor;
+module.exports = (sequelize) => {
+  return sequelize.define("Sensor", {
+    id: {
+      type: DataTypes.TINYINT,
+      primaryKey: true,
+    },
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    type: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+  });
+};

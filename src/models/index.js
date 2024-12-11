@@ -1,48 +1,34 @@
 const sequelize = require("../utils/database");
 
-// Import all models
-const Microcontroller = require("./microcontroller.model");
-const Module = require("./module.model");
-const ModuleDetail = require("./module_detail.model");
-const Sensor = require("./sensor.model");
-const SensorValue = require("./sensor_value.model");
-const Status = require("./status.model");
+const Microcontroller = require('./microcontroller.model');
+const Status = require('./status.model');
+const Module = require('./module.model');
+const ModuleDetail = require('./module_detail.model');
+const Sensor = require('./sensor.model');
+const SensorValue = require('./sensor_value.model');
 
-// Define associations
-Microcontroller.belongsTo(Status, {
-  foreignKey: "status_id",
-  as: "status",
-});
+function setupAssociations(models) {
+  // Associations
+  models.Microcontroller.hasOne(models.Status, { foreignKey: 'id', sourceKey: 'status_id' });
+  models.Microcontroller.hasMany(models.Module, { foreignKey: 'microcontroller_id' });
 
-Module.associate = (models) => {
-  Module.hasMany(models.ModuleDetail, {
-    foreignKey: 'module_id',
-    as: 'sensors'
-  });
-};
+  models.Module.belongsTo(models.Microcontroller, { foreignKey: 'microcontroller_id' });
+  models.Module.hasMany(models.ModuleDetail, { foreignKey: 'module_id' });
 
-ModuleDetail.associate = (models) => {
-  ModuleDetail.belongsTo(models.Module, {
-    foreignKey: 'module_id',
-    as: 'module'
-  });
-};
+  models.ModuleDetail.belongsTo(models.Module, { foreignKey: 'module_id' });
+  models.ModuleDetail.hasMany(models.Sensor, { foreignKey: 'id', sourceKey: 'sensor_id' });
 
-SensorValue.belongsTo(Sensor, {
-  foreignKey: "sensor_id",
-  as: "sensor",
-});
+  models.Sensor.belongsToMany(models.ModuleDetail, { through: 'ModuleDetail', foreignKey: 'sensor_id', otherKey: 'module_id' });
+  models.Sensor.hasMany(models.SensorValue, { foreignKey: 'sensor_id' });
 
-Module.associate({ ModuleDetail });
-ModuleDetail.associate({ Module });
+  models.SensorValue.belongsTo(models.Sensor, { foreignKey: 'sensor_id' });
+}
 
-// Export all models for use in services or controllers
 module.exports = {
-  sequelize,
   Microcontroller,
+  Status,
   Module,
   ModuleDetail,
   Sensor,
-  SensorValue,
-  Status,
+  SensorValue
 };

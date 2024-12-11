@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sensor Dashboard</title>
+  <link rel="stylesheet" href="../CSS/styles2.css">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="resumen.php" class="nav-link">Resumen</a>
+        <div class="dropdown">
+            <a href="#" class="nav-link">Datos registrados</a>
+            <div class="dropdown-content">
+              <a href="KY018.php">Sensor Intensidad de Luz</a>
+              <a href="GYML8511.php">Sensor Ultravioleta</a>
+              <a href="MQ2.php">Sensor Gas</a>
+            </div>
+          </div>
+        <a href="../HTML/informacion_sensor.html" class="nav-link">Informacion Sensores</a>
+        <a href="Graficos.php" class="nav-link">Graficos</a>
+      </nav>
+  <div class="sensor-grid">
+    <div class="sensor-card">
+        <div class="sensor-title">Sensor Intensidad de Luz (KY-018)</div>
+        <div class="sensor-circle"><br> <br>
+          Ultima muestra Porcentaje de Oscuridad
+          <%= latestKY018.value %>
+        </div>
+    </div>
+    <div class="sensor-card">
+        <div class="sensor-title" style="background-color: blueviolet;">Sensor Ultravioleta (GYML8511)</div>
+        <div class="sensor-circle"><br> <br>
+            Ultima muestra Intensidad UV
+            <%= latestGYML8511.value %>
+        </div>
+    </div>
+    <div class="sensor-card">
+        <div class="sensor-title" style="background-color: rgb(193, 223, 73);">Sensor Detección Gas (MQ-2)</div>
+        <div class="sensor-circle"><br> <br>
+            Ultima muestra Concentración de Gas
+            <%= latestMQ2.value %>
+        </div>
+    </div>
+  </div>
+</body>
+</html>
