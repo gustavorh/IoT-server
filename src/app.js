@@ -5,7 +5,6 @@ const statusRoutes = require("./routes/statuses.route");
 const moduleRoutes = require("./routes/modules.route");
 const sensorRoutes = require("./routes/sensors.route");
 const iotRoutes = require("./routes/iot.route");
-const defaultRoutes = require("./routes/default.route");
 
 const app = express();
 
@@ -22,9 +21,6 @@ app.use("/api/statuses", statusRoutes);
 app.use("/api/modules", moduleRoutes);
 app.use("/api/sensors", sensorRoutes);
 app.use("/api/iot", iotRoutes);
-
-// Default route
-app.use("/", defaultRoutes);
 
 // Error handling
 app.use((err, req, res, next) => {
