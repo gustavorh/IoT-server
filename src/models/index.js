@@ -14,30 +14,27 @@ Microcontroller.belongsTo(Status, {
   as: "status",
 });
 
-ModuleDetail.belongsTo(Module, {
-  foreignKey: "module_id",
-  as: "module",
-});
+Module.associate = (models) => {
+  Module.hasMany(models.ModuleDetail, {
+    foreignKey: 'module_id',
+    as: 'sensors'
+  });
+};
 
-ModuleDetail.belongsTo(Sensor, {
-  foreignKey: "sensor_id",
-  as: "sensor",
-});
-
-Module.belongsTo(Microcontroller, {
-  foreignKey: "microcontroller_id",
-  as: "microcontroller",
-});
-
-Module.hasMany(ModuleDetail, {
-  foreignKey: "module_id",
-  as: "module_detail",
-});
+ModuleDetail.associate = (models) => {
+  ModuleDetail.belongsTo(models.Module, {
+    foreignKey: 'module_id',
+    as: 'module'
+  });
+};
 
 SensorValue.belongsTo(Sensor, {
   foreignKey: "sensor_id",
   as: "sensor",
 });
+
+Module.associate({ ModuleDetail });
+ModuleDetail.associate({ Module });
 
 // Export all models for use in services or controllers
 module.exports = {

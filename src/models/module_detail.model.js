@@ -1,18 +1,26 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../utils/database");
-const Module = require("./module.model");
-const Sensor = require("./sensor.model");
 
-const ModuleDetail = sequelize.define("ModuleDetail", {
+const ModuleDetail = sequelize.define('ModuleDetail', {
   id: {
     type: DataTypes.TINYINT,
     primaryKey: true,
-    autoIncrement: true,
+    autoIncrement: true
   },
-  quantity: {
+  module_id: {
     type: DataTypes.TINYINT,
     allowNull: false,
   },
+  sensor_id: {
+    type: DataTypes.TINYINT,
+    allowNull: false
+  },
+  quantity: {
+    type: DataTypes.TINYINT,
+    allowNull: false
+  }
+}, {
+  timestamps: true
 });
 
 module.exports = ModuleDetail;

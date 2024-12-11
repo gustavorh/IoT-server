@@ -1,83 +1,93 @@
-const { Module, ModuleDetail, sequelize } = require("../models/index");
+const sequelize = require("../utils/database");
+const { Module, ModuleDetail } = require("../models");
 
 class modulesService {
-  async createModule(data) {
-    let transaction;
+  async getAll() {
     try {
-      // Start the transaction
-      transaction = await sequelize.transaction();
-      const { name, location, microcontroller_id, module_details } = data;
-  
-      // Create the module
-      const module = await Module.create(
-        {
-          name,
-          location,
-          microcontroller_id,
+      return await Module.findAll({
+        include: {
+          model: ModuleDetail,
+          as: "sensors",
         },
-        { transaction }
-      );
-  
-      // Handle module details (single or multiple sensors)
-      const moduleDetailsToCreate = Array.isArray(module_details)
-        ? module_details
-        : [module_details];
-  
-      // Create module details for each sensor
-      await Promise.all(
-        moduleDetailsToCreate.map((detail) =>
-          ModuleDetail.create(
-            {
-              module_id: module.id,
-              sensor_id: detail.sensor_id,
-              quantity: detail.quantity,
-            },
-            { transaction }
-          )
-        )
-      );
-  
-      // Commit the transaction
-      await transaction.commit();
-  
-      // Fetch the created module with associated module details
-      const createdModule = await Module.findByPk(module.id, {
-        include: [
-          {
-            model: ModuleDetail,
-            as: "module_detail",
-          },
-        ],
       });
-  
-      return createdModule;
     } catch (error) {
-      // If a transaction exists and is not finished, roll it back
-      if (transaction && !transaction.finished) {
-        try {
-          await transaction.rollback();
-        } catch (rollbackError) {
-          console.error("Error rolling back transaction:", rollbackError);
-        }
-      }
-      throw new Error(`Failed to create module: ${error.message}`);
+      throw new Error(`Failed to fetch sensors: ${error.message}`);
     }
   }
 
-  async getAllModules() {
+  async getById(id) {
+    return await Module.findByPk(id, {
+      include: {
+        model: ModuleDetail,
+        as: "sensors",
+      },
+    });
+  }
+
+  async create(moduleData) {
+    const { name, location, microcontroller_id, sensors = [] } = moduleData;
+
+    // Start a transaction
+    const transaction = await sequelize.transaction();
+
     try {
-      return await Module.findAll({
-        include: [
-          {
-            model: ModuleDetail,
-            as: "module_detail",
-          },
-        ],
-      });
+      // Create the module
+      const module = await Module.create({ name, location, microcontroller_id }, { transaction });
+
+      // Validate sensors before creating them
+      if (sensors.length > 0) {
+        const sensorPromises = sensors.map((sensor) => {
+          if (!sensor.sensorId) {
+            throw new Error("Each sensor must have a valid sensorId.");
+          }
+          return ModuleDetail.create(
+            {
+              module_id: module.id,
+              sensor_id: sensor.sensorId,
+              quantity: sensor.quantity || 1, // Default to 1 if quantity is missing
+            },
+            { transaction }
+          );
+        });
+        await Promise.all(sensorPromises);
+      }
+
+      // Commit the transaction
+      await transaction.commit();
+
+      return module;
     } catch (error) {
-      throw new Error(`Failed to fetch modules: ${error.message}`);
+      // Rollback the transaction in case of an error
+      await transaction.rollback();
+      throw error;
     }
+  }
+
+  async updateById(id, moduleData) {
+    const { name, location, microcontroller_id, sensors = [] } = moduleData;
+
+    // Update the Module
+    const module = await Module.findByPk(id);
+    await module.update({ name, location, microcontroller_id });
+
+    // Update associated sensor details
+    await ModuleDetail.destroy({ where: { module_id: id } });
+    await Promise.all(
+      sensors.map(async (sensor) => {
+        await ModuleDetail.create({ module_id: id, ...sensor });
+      })
+    );
+
+    return module;
+  }
+
+  async deleteById(id) {
+    // Delete the Module
+    await Module.destroy({ where: { id } });
+
+    // Delete associated sensor details
+    await ModuleDetail.destroy({ where: { module_id: id } });
   }
 }
 
-module.exports = new modulesService();
+module.exports = modulesService;
