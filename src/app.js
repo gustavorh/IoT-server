@@ -5,10 +5,16 @@ const statusRoutes = require("./routes/statuses.route");
 const moduleRoutes = require("./routes/modules.route");
 const sensorRoutes = require("./routes/sensors.route");
 const iotRoutes = require("./routes/iot.route");
+const cors = require('cors');
 
 const app = express();
 
 const PORT = process.env.PORT || 3000;
+
+app.use(cors({
+  origin: 'http://localhost:5173', // Replace 'yourFrontendPort' with your frontend port (e.g., 'http://localhost:3000')
+  methods: 'GET, POST, PUT, DELETE, OPTIONS', // Adjust methods as per your API
+}));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
